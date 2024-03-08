@@ -1,6 +1,7 @@
 ﻿using AndreyMMP.Portfolio.Skills.API.Context;
 using AndreyMMP.Portfolio.Skills.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace AndreyMMP.Portfolio.Skills.API.Controllers
 {
@@ -38,18 +39,27 @@ namespace AndreyMMP.Portfolio.Skills.API.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateSkill(Skill skill)
         {
-            _portfolioDbContext.Skills.Update(skill);
-            await _portfolioDbContext.SaveChangesAsync();
-            return Ok();
+            Skill skillToUpdate = await GetSkillById(skill.Id);
+            if (skillToUpdate != null)
+            {
+                _portfolioDbContext.Skills.Update(skill);
+                await _portfolioDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            return NoContent();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteSkill(int id)
         {
-            Skill skill = await GetSkillById(id);
-            _portfolioDbContext.Skills.Remove(skill);
-            await _portfolioDbContext.SaveChangesAsync();
-            return Ok();
+            Skill skillToDelete = await GetSkillById(id);
+            if (skillToDelete != null)
+            {
+                _portfolioDbContext.Skills.Remove(skillToDelete);
+                await _portfolioDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            return NoContent();
         }
     }
 }
