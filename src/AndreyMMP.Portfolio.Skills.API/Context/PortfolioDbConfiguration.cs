@@ -3,9 +3,9 @@
     public static class PortfolioDbConfiguration
     {
         private static readonly string
-            _dbHost = "localhost",
-            _dbName = "portfolio",
-            _dbPassword = "P@ssw0rd#111";
+            _dbHost = Environment.GetEnvironmentVariable("DB_HOST"),
+            _dbName = Environment.GetEnvironmentVariable("DB_NAME"),
+            _dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
         public static string GetConnectionString()
         {

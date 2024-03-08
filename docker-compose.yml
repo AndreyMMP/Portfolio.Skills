@@ -1,0 +1,30 @@
+version: '3.4'
+
+networks:
+  backend:
+
+services:
+  portfoliodb:
+    container_name: portfolio-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=P@ssw0rd#111
+    networks:
+      - backend
+    ports:
+      - 8001:1433
+  andreymmp.portfolio.skills.api:
+    container_name: skills-api
+    image: ${DOCKER_REGISTRY-}andreymmpportfolioskillsapi
+    build:
+      context: .
+      dockerfile: src/AndreyMMP.Portfolio.Skills.API/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8002:80
+    environment:
+      - DB_HOST=portfoliodb
+      - DB_NAME=portfolio
+      - DB_SA_PASSWORD=P@ssw0rd#111
