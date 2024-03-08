@@ -1,4 +1,4 @@
-using AndreyMMP.Portfolio.Skills.API;
+using AndreyMMP.Portfolio.Skills.API.Context;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

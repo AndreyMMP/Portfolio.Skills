@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace AndreyMMP.Portfolio.Skills.API
+namespace AndreyMMP.Portfolio.Skills.API.Context
 {
     public class PortfolioDbContext : DbContext
     {
