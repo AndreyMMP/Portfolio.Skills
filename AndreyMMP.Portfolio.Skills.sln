@@ -3,9 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreyMMP.Portfolio.Skills.API", "src\AndreyMMP.Portfolio.Skills.API\AndreyMMP.Portfolio.Skills.API.csproj", "{6D5DA664-8D62-4D15-A489-DF8D6E5D4A90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreyMMP.Portfolio.Skills.API", "src\AndreyMMP.Portfolio.Skills.API\AndreyMMP.Portfolio.Skills.API.csproj", "{6D5DA664-8D62-4D15-A489-DF8D6E5D4A90}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{EBFAE73E-0112-482B-BF11-E8DAD599E0DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{34EB6B84-F998-4087-A251-8D77BD4B4A6A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreyMMP.Portfolio.Skills.Domain", "src\AndreyMMP.Portfolio.Skills.Domain\AndreyMMP.Portfolio.Skills.Domain.csproj", "{1B25659A-F0EC-44DB-BEFE-EAB153B5A97C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{E471C99E-110A-4DEA-BDDE-F79F4663C058}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreyMMP.Portfolio.Skills.Data", "src\AndreyMMP.Portfolio.Skills.Data\AndreyMMP.Portfolio.Skills.Data.csproj", "{FCBD3B39-895F-44CB-8D1C-CCC19FDBC7E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{64BBD075-74DF-42AB-B061-9A68BDE7B84C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreyMMP.Portfolio.Skills.Application", "src\AndreyMMP.Portfolio.Skills.Application\AndreyMMP.Portfolio.Skills.Application.csproj", "{429AF2F7-0F52-4BD2-A34B-088164289567}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{A9736EA1-51AF-4D1C-8067-C323A4CA881E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +35,27 @@ Global
 		{EBFAE73E-0112-482B-BF11-E8DAD599E0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBFAE73E-0112-482B-BF11-E8DAD599E0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBFAE73E-0112-482B-BF11-E8DAD599E0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B25659A-F0EC-44DB-BEFE-EAB153B5A97C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B25659A-F0EC-44DB-BEFE-EAB153B5A97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B25659A-F0EC-44DB-BEFE-EAB153B5A97C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B25659A-F0EC-44DB-BEFE-EAB153B5A97C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCBD3B39-895F-44CB-8D1C-CCC19FDBC7E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCBD3B39-895F-44CB-8D1C-CCC19FDBC7E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCBD3B39-895F-44CB-8D1C-CCC19FDBC7E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCBD3B39-895F-44CB-8D1C-CCC19FDBC7E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{429AF2F7-0F52-4BD2-A34B-088164289567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{429AF2F7-0F52-4BD2-A34B-088164289567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{429AF2F7-0F52-4BD2-A34B-088164289567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{429AF2F7-0F52-4BD2-A34B-088164289567}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6D5DA664-8D62-4D15-A489-DF8D6E5D4A90} = {A9736EA1-51AF-4D1C-8067-C323A4CA881E}
+		{1B25659A-F0EC-44DB-BEFE-EAB153B5A97C} = {34EB6B84-F998-4087-A251-8D77BD4B4A6A}
+		{FCBD3B39-895F-44CB-8D1C-CCC19FDBC7E3} = {E471C99E-110A-4DEA-BDDE-F79F4663C058}
+		{429AF2F7-0F52-4BD2-A34B-088164289567} = {64BBD075-74DF-42AB-B061-9A68BDE7B84C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7CA13A3D-F68C-42FB-A8FE-190BF9D53F16}

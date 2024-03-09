@@ -1,4 +1,4 @@
-﻿namespace AndreyMMP.Portfolio.Skills.API.Context
+﻿namespace AndreyMMP.Portfolio.Skills.Data.Context
 {
     public static class PortfolioDbConfiguration
     {

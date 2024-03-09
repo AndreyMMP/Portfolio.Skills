@@ -1,9 +1,9 @@
-﻿using AndreyMMP.Portfolio.Skills.API.Models;
+﻿using AndreyMMP.Portfolio.Skills.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace AndreyMMP.Portfolio.Skills.API.Context
+namespace AndreyMMP.Portfolio.Skills.Data.Context
 {
     public class PortfolioDbContext : DbContext
     {

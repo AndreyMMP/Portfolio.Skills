@@ -1,6 +1,7 @@
-﻿using AndreyMMP.Portfolio.Skills.API.Context;
-using AndreyMMP.Portfolio.Skills.API.Models;
+﻿using AndreyMMP.Portfolio.Skills.Application.DTO;
+using AndreyMMP.Portfolio.Skills.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AndreyMMP.Portfolio.Skills.API.Controllers
 {
@@ -8,57 +9,106 @@ namespace AndreyMMP.Portfolio.Skills.API.Controllers
     [ApiController]
     public class SkillController : ControllerBase
     {
-        private readonly PortfolioDbContext _portfolioDbContext;
+        private readonly ISkillService _skillService;
 
-        public SkillController(PortfolioDbContext portfolioDbContext)
+        public SkillController(ISkillService skillService)
         {
-            _portfolioDbContext = portfolioDbContext;
-        }
-
-        [HttpGet]
-        public ActionResult<IEnumerable<Skill>> GetSkills()
-        {
-            return _portfolioDbContext.Skills;
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<Skill> GetSkillById(int id)
-        {
-            return await _portfolioDbContext.Skills.FindAsync(id);
+            _skillService = skillService;
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateSkill(Skill skill)
+        public async Task<ActionResult> CreateSkill(SkillDTO skill)
         {
-            await _portfolioDbContext.Skills.AddAsync(skill);
-            await _portfolioDbContext.SaveChangesAsync();
-            return Ok();
+            try
+            {
+                await _skillService.CreateSkill(skill);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetSkills()
+        {
+            try
+            {
+                IEnumerable<SkillDTO> skills = await _skillService.GetSkills();
+
+                if (skills.IsNullOrEmpty())
+                {
+                    return NoContent();
+                }
+
+                return Ok(skills);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> GetSkillById(int id)
+        {
+            try
+            {
+                SkillDTO skill = await _skillService.GetSkillById(id);
+
+                if (skill == null)
+                {
+                    return NoContent();
+                }
+
+                return Ok(skill);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateSkill(Skill skill)
+        public async Task<ActionResult> UpdateSkill(SkillDTO skill)
         {
-            Skill skillToUpdate = await GetSkillById(skill.Id);
-            if (skillToUpdate != null)
+            try
             {
-                _portfolioDbContext.Skills.Update(skill);
-                await _portfolioDbContext.SaveChangesAsync();
+                SkillDTO skillToUpdate = await _skillService.GetSkillById(skill.Id);
+
+                if (skillToUpdate == null)
+                {
+                    return NoContent();
+                }
+
+                await _skillService.UpdateSkill(skill);
                 return Ok();
             }
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteSkill(int id)
         {
-            Skill skillToDelete = await GetSkillById(id);
-            if (skillToDelete != null)
+            try
             {
-                _portfolioDbContext.Skills.Remove(skillToDelete);
-                await _portfolioDbContext.SaveChangesAsync();
+                SkillDTO skillToDelete = await _skillService.GetSkillById(id);
+                if (skillToDelete == null)
+                {
+                    return NoContent();
+                }
+
+                await _skillService.DeleteSkill(id);
                 return Ok();
             }
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
