@@ -12,6 +12,7 @@ namespace AndreyMMP.Portfolio.Skills.Domain.Models
         public int Id { get; set; }
 
         [Column("name")]
+        [Required]
         public string Name { get; set; }
 
         [Column("experience_time")]

@@ -1,5 +1,6 @@
 ﻿using AndreyMMP.Portfolio.Skills.Application.DTO;
 using AndreyMMP.Portfolio.Skills.Application.Interfaces;
+using AndreyMMP.Portfolio.Skills.Application.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,8 +22,13 @@ namespace AndreyMMP.Portfolio.Skills.API.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(skill.Name))
+                {
+                    return BadRequest(SkillResponse.SkillNameCantBeEmpty);
+                }
+
                 await _skillService.CreateSkill(skill);
-                return Ok();
+                return Ok(SkillResponse.SkillCreated);
             }
             catch (Exception ex)
             {
@@ -39,7 +45,7 @@ namespace AndreyMMP.Portfolio.Skills.API.Controllers
 
                 if (skills.IsNullOrEmpty())
                 {
-                    return NoContent();
+                    return BadRequest(SkillResponse.NoSkillRecordsFound);
                 }
 
                 return Ok(skills);
@@ -59,7 +65,7 @@ namespace AndreyMMP.Portfolio.Skills.API.Controllers
 
                 if (skill == null)
                 {
-                    return NoContent();
+                    return BadRequest(SkillResponse.NoSkillRecordsFound);
                 }
 
                 return Ok(skill);
@@ -79,11 +85,16 @@ namespace AndreyMMP.Portfolio.Skills.API.Controllers
 
                 if (skillToUpdate == null)
                 {
-                    return NoContent();
+                    return BadRequest(SkillResponse.NoSkillRecordsFound);
+                }
+
+                if (string.IsNullOrEmpty(skill.Name))
+                {
+                    return BadRequest(SkillResponse.SkillNameCantBeEmpty);
                 }
 
                 await _skillService.UpdateSkill(skill);
-                return Ok();
+                return Ok(SkillResponse.SkillUpdated);
             }
             catch (Exception ex)
             {
@@ -99,11 +110,11 @@ namespace AndreyMMP.Portfolio.Skills.API.Controllers
                 SkillDTO skillToDelete = await _skillService.GetSkillById(id);
                 if (skillToDelete == null)
                 {
-                    return NoContent();
+                    return BadRequest(SkillResponse.NoSkillRecordsFound);
                 }
 
                 await _skillService.DeleteSkill(id);
-                return Ok();
+                return Ok(SkillResponse.SkillDeleted);
             }
             catch (Exception ex)
             {
