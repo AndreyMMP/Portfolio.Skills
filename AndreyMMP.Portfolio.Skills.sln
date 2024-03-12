@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreyMMP.Portfolio.Skills.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{A9736EA1-51AF-4D1C-8067-C323A4CA881E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C9C8D554-5F2C-4429-8D60-8C93411BE0CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreyMMP.Portfolio.Skills.Tests", "tests\AndreyMMP.Portfolio.Skills.Tests\AndreyMMP.Portfolio.Skills.Tests.csproj", "{449015AC-0A77-4572-9D9A-5A9C11131C40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,10 @@ Global
 		{429AF2F7-0F52-4BD2-A34B-088164289567}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{429AF2F7-0F52-4BD2-A34B-088164289567}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{429AF2F7-0F52-4BD2-A34B-088164289567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{449015AC-0A77-4572-9D9A-5A9C11131C40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{449015AC-0A77-4572-9D9A-5A9C11131C40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{449015AC-0A77-4572-9D9A-5A9C11131C40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{449015AC-0A77-4572-9D9A-5A9C11131C40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +64,7 @@ Global
 		{1B25659A-F0EC-44DB-BEFE-EAB153B5A97C} = {34EB6B84-F998-4087-A251-8D77BD4B4A6A}
 		{FCBD3B39-895F-44CB-8D1C-CCC19FDBC7E3} = {E471C99E-110A-4DEA-BDDE-F79F4663C058}
 		{429AF2F7-0F52-4BD2-A34B-088164289567} = {64BBD075-74DF-42AB-B061-9A68BDE7B84C}
+		{449015AC-0A77-4572-9D9A-5A9C11131C40} = {C9C8D554-5F2C-4429-8D60-8C93411BE0CE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7CA13A3D-F68C-42FB-A8FE-190BF9D53F16}
