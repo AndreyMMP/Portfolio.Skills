@@ -54,7 +54,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
 
             Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
             Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
-            _skillRepository.Verify(r => r.CreateSkill(It.IsAny<Skill>()), Times.Never);
+            _skillRepository.Verify(r => r.UpdateSkill(It.IsAny<Skill>()), Times.Never);
         }
 
         [Fact]
@@ -68,7 +68,8 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
             Exception ex = await Assert.ThrowsAsync<ArgumentException>(result);
             Assert.Equal(SkillResponse.SkillNameCantBeEmpty, ex.Message);
 
-            _skillRepository.Verify(r => r.CreateSkill(It.IsAny<Skill>()), Times.Never);
+            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(r => r.UpdateSkill(It.IsAny<Skill>()), Times.Never);
         }
 
         [Fact]
