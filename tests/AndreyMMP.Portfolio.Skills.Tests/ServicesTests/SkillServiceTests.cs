@@ -54,6 +54,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
 
             Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
             Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
+            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
             _skillRepository.Verify(r => r.UpdateSkill(It.IsAny<Skill>()), Times.Never);
         }
 
@@ -86,6 +87,33 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
             Assert.True(result.Exception == null);
             _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
             _skillRepository.Verify(r => r.UpdateSkill(It.IsAny<Skill>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeleteSkill_WithEmptyId_ShouldThrowException()
+        {
+            var result = () => _skillService.DeleteSkill(0);
+
+            Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
+            Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
+            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(r => r.DeleteSkill(0), Times.Never);
+        }
+
+        [Fact]
+        public async Task DeleteSkill_WithId_ShouldNotThrowException()
+        {
+            var id = SkillFixture.CreateInt();
+            _skillRepository.Setup(s => s.GetSkillById(id)).Returns(Task.FromResult(new Skill { Id = id, Name = SkillFixture.CreateString(10) }));
+            _skillRepository.Setup(s => s.DeleteSkill(It.IsAny<int>())).Returns(Task.CompletedTask);
+
+            var result = _skillService.DeleteSkill(id);
+            await Task.Run(() => result);
+
+            Assert.True(result.IsCompleted);
+            Assert.True(result.Exception == null);
+            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(r => r.DeleteSkill(It.IsAny<int>()), Times.Once);
         }
     }
 }
