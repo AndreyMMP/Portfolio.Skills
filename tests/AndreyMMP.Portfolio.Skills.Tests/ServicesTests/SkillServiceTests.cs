@@ -25,20 +25,66 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
         [Fact]
         public async Task CreateSkill_WithEmptyName_ShouldThrowExeception()
         {
-            var result = () => _skillService.CreateSkill(new SkillDTO { Name = string.Empty });
+            var skillDTO = new SkillDTO { Name = string.Empty };
+            var result = () => _skillService.CreateSkill(skillDTO);
 
             Exception ex = await Assert.ThrowsAsync<ArgumentException>(result);
             Assert.Equal(SkillResponse.SkillNameCantBeEmpty, ex.Message);
+            _skillRepository.Verify(r => r.CreateSkill(It.IsAny<Skill>()), Times.Never);
         }
 
         [Fact]
         public async Task CreateSkill_WithName_ShouldNotThrowExeception()
         {
             var skillDTO = new SkillDTO { Name = SkillFixture.CreateString(10) };
-            _skillRepository.Setup(s => s.CreateSkill(new Skill { Name = skillDTO.Name })).Returns(Task.CompletedTask);
-            
+            _skillRepository.Setup(s => s.CreateSkill(It.IsAny<Skill>())).Returns(Task.CompletedTask);
+
             var result = _skillService.CreateSkill(skillDTO);
+            await Task.Run(() => result);
+
+            Assert.True(result.IsCompleted);
             Assert.True(result.Exception == null);
+            _skillRepository.Verify(r => r.CreateSkill(It.IsAny<Skill>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateSkill_WithEmptyId_ShouldThrowExeception()
+        {
+            var result = () => _skillService.UpdateSkill(new SkillDTO() { Id = 0 });
+
+            Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
+            Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
+            _skillRepository.Verify(r => r.CreateSkill(It.IsAny<Skill>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateSkill_WithEmptyName_ShouldThrowExeception()
+        {
+            var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt() };
+            _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult(new Skill { Id = skillDTO.Id, Name = SkillFixture.CreateString(10)}));
+
+            var result = () => _skillService.UpdateSkill(skillDTO);
+
+            Exception ex = await Assert.ThrowsAsync<ArgumentException>(result);
+            Assert.Equal(SkillResponse.SkillNameCantBeEmpty, ex.Message);
+
+            _skillRepository.Verify(r => r.CreateSkill(It.IsAny<Skill>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateSkill_WithIdAndName_ShouldNotThrowExeception()
+        {
+            var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt(), Name = SkillFixture.CreateString(10) };
+            _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult(new Skill { Id = skillDTO.Id, Name = SkillFixture.CreateString(10) }));
+            _skillRepository.Setup(s => s.UpdateSkill(It.IsAny<Skill>())).Returns(Task.CompletedTask);
+
+            var result = _skillService.UpdateSkill(skillDTO);
+            await Task.Run(() => result);
+
+            Assert.True(result.IsCompleted);
+            Assert.True(result.Exception == null);
+            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(r => r.UpdateSkill(It.IsAny<Skill>()), Times.Once);
         }
     }
 }
