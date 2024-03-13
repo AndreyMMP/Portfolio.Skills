@@ -23,7 +23,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task CreateSkill_WithEmptyName_ShouldThrowExeception()
+        public async Task CreateSkill_WithEmptyName_ShouldThrowException()
         {
             var skillDTO = new SkillDTO { Name = string.Empty };
             var result = () => _skillService.CreateSkill(skillDTO);
@@ -34,7 +34,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task CreateSkill_WithName_ShouldNotThrowExeception()
+        public async Task CreateSkill_WithName_ShouldNotThrowException()
         {
             var skillDTO = new SkillDTO { Name = SkillFixture.CreateString(10) };
             _skillRepository.Setup(s => s.CreateSkill(It.IsAny<Skill>())).Returns(Task.CompletedTask);
@@ -48,7 +48,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task UpdateSkill_WithEmptyId_ShouldThrowExeception()
+        public async Task UpdateSkill_WithEmptyId_ShouldThrowException()
         {
             var result = () => _skillService.UpdateSkill(new SkillDTO() { Id = 0 });
 
@@ -58,7 +58,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task UpdateSkill_WithEmptyName_ShouldThrowExeception()
+        public async Task UpdateSkill_WithEmptyName_ShouldThrowException()
         {
             var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt() };
             _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult(new Skill { Id = skillDTO.Id, Name = SkillFixture.CreateString(10)}));
@@ -72,7 +72,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task UpdateSkill_WithIdAndName_ShouldNotThrowExeception()
+        public async Task UpdateSkill_WithIdAndName_ShouldNotThrowException()
         {
             var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt(), Name = SkillFixture.CreateString(10) };
             _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult(new Skill { Id = skillDTO.Id, Name = SkillFixture.CreateString(10) }));
