@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\AndreyMMP.Portfolio.Skills.API\AndreyMMP.Portfolio.Skills.API.csproj" />
     <ProjectReference Include="..\..\src\AndreyMMP.Portfolio.Skills.Application\AndreyMMP.Portfolio.Skills.Application.csproj" />
     <ProjectReference Include="..\..\src\AndreyMMP.Portfolio.Skills.Data\AndreyMMP.Portfolio.Skills.Data.csproj" />
   </ItemGroup>
