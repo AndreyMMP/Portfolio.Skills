@@ -30,7 +30,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
 
             Exception ex = await Assert.ThrowsAsync<ArgumentException>(result);
             Assert.Equal(SkillResponse.SkillNameCantBeEmpty, ex.Message);
-            _skillRepository.Verify(r => r.CreateSkill(It.IsAny<Skill>()), Times.Never);
+            _skillRepository.Verify(s => s.CreateSkill(It.IsAny<Skill>()), Times.Never);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
 
             Assert.True(result.IsCompleted);
             Assert.True(result.Exception == null);
-            _skillRepository.Verify(r => r.CreateSkill(It.IsAny<Skill>()), Times.Once);
+            _skillRepository.Verify(s => s.CreateSkill(It.IsAny<Skill>()), Times.Once);
         }
 
         [Fact]
@@ -54,23 +54,23 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
 
             Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
             Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
-            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
-            _skillRepository.Verify(r => r.UpdateSkill(It.IsAny<Skill>()), Times.Never);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.UpdateSkill(It.IsAny<Skill>()), Times.Never);
         }
 
         [Fact]
         public async Task UpdateSkill_WithEmptyName_ShouldThrowException()
         {
             var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt() };
-            _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult(new Skill { Id = skillDTO.Id, Name = SkillFixture.CreateString(10)}));
+            _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult(new Skill { Id = skillDTO.Id, Name = SkillFixture.CreateString(10) }));
 
             var result = () => _skillService.UpdateSkill(skillDTO);
 
             Exception ex = await Assert.ThrowsAsync<ArgumentException>(result);
             Assert.Equal(SkillResponse.SkillNameCantBeEmpty, ex.Message);
 
-            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
-            _skillRepository.Verify(r => r.UpdateSkill(It.IsAny<Skill>()), Times.Never);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.UpdateSkill(It.IsAny<Skill>()), Times.Never);
         }
 
         [Fact]
@@ -85,8 +85,8 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
 
             Assert.True(result.IsCompleted);
             Assert.True(result.Exception == null);
-            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
-            _skillRepository.Verify(r => r.UpdateSkill(It.IsAny<Skill>()), Times.Once);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.UpdateSkill(It.IsAny<Skill>()), Times.Once);
         }
 
         [Fact]
@@ -96,8 +96,8 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
 
             Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
             Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
-            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
-            _skillRepository.Verify(r => r.DeleteSkill(0), Times.Never);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.DeleteSkill(0), Times.Never);
         }
 
         [Fact]
@@ -112,8 +112,62 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
 
             Assert.True(result.IsCompleted);
             Assert.True(result.Exception == null);
-            _skillRepository.Verify(r => r.GetSkillById(It.IsAny<int>()), Times.Once);
-            _skillRepository.Verify(r => r.DeleteSkill(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.DeleteSkill(It.IsAny<int>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetSkills_WithNoSkillsRecords_ShouldThrowException()
+        {
+            var result = () => _skillService.GetSkills();
+
+            Exception ex = await Assert.ThrowsAsync<Exception>(result);
+            Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
+            _skillRepository.Verify(s => s.GetSkills(), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetSkills_WithSkillsRecords_ShouldNotThrowException()
+        {
+            List<Skill> skills = new List<Skill>();
+            Skill skill = new Skill { Id = SkillFixture.CreateInt(), Name = SkillFixture.CreateString(10) };
+            skills.Add(skill);
+            _skillRepository.Setup(s => s.GetSkills()).ReturnsAsync(skills);
+            List<SkillDTO> skillsDTO = new List<SkillDTO>();
+            skillsDTO.Add(new SkillDTO { Id = skill.Id, Name = skill.Name });
+            _mapper.Setup(m => m.Map<IEnumerable<SkillDTO>>(skills)).Returns(skillsDTO);
+
+            var result = _skillService.GetSkills();
+            await Task.Run(() => result);
+            
+            Assert.Equal(result.Result, skillsDTO);
+            _skillRepository.Verify(s => s.GetSkills(), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetSkillById_WithNoSkillsRecords_ShouldThrowException()
+        {
+            var result = () => _skillService.GetSkillById(SkillFixture.CreateInt());
+
+            Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
+            Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetSkillById_WithSkillsRecords_ShouldNotThrowException()
+        {
+            int id = SkillFixture.CreateInt();
+            Skill skill = new Skill { Id = id, Name = SkillFixture.CreateString(10) };
+            _skillRepository.Setup(s => s.GetSkillById(id)).ReturnsAsync(skill);            
+            SkillDTO skillDTO = new SkillDTO { Id = skill.Id, Name = skill.Name };
+            _mapper.Setup(m => m.Map<SkillDTO>(skill)).Returns(skillDTO);
+
+            var result = _skillService.GetSkillById(id);
+            await Task.Run(() => result);
+            
+            Assert.Equal(result.Result, skillDTO);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
         }
     }
 }
