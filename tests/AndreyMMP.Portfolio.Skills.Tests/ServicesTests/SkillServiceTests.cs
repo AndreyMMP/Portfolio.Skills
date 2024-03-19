@@ -26,6 +26,7 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
         public async Task CreateSkill_WithEmptyName_ShouldThrowException()
         {
             var skillDTO = new SkillDTO { Name = string.Empty };
+
             var result = () => _skillService.CreateSkill(skillDTO);
 
             Exception ex = await Assert.ThrowsAsync<ArgumentException>(result);
@@ -50,7 +51,23 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ServicesTests
         [Fact]
         public async Task UpdateSkill_WithEmptyId_ShouldThrowException()
         {
-            var result = () => _skillService.UpdateSkill(new SkillDTO() { Id = 0 });
+            var skillDTO = new SkillDTO() { Name = SkillFixture.CreateString(10) };
+
+            var result = () => _skillService.UpdateSkill(skillDTO);
+
+            Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
+            Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.UpdateSkill(It.IsAny<Skill>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateSkill_WithIdButNoSkillsRecords_ShouldThrowException()
+        {
+            var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt(), Name = SkillFixture.CreateString(10) };
+            _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult((Skill)null));
+
+            var result = () => _skillService.UpdateSkill(skillDTO);            
 
             Exception ex = await Assert.ThrowsAsync<KeyNotFoundException>(result);
             Assert.Equal(SkillResponse.NoSkillRecordsFound, ex.Message);

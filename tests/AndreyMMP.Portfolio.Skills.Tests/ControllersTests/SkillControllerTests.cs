@@ -55,5 +55,70 @@ namespace AndreyMMP.Portfolio.Skills.Tests.ControllersTests
             Assert.True(result.Exception == null);
             _skillRepository.Verify(s => s.CreateSkill(It.IsAny<Skill>()), Times.Once);
         }
+
+        [Fact]
+        public async Task UpdateSkill_WithEmptyId_ShouldReturnFailureMessage()
+        {
+            var skillDTO = new SkillDTO() { Name = SkillFixture.CreateString(10) };            
+
+            var result = _skillController.UpdateSkill(skillDTO);
+            await Task.Run(() => result);
+
+            var badRequestObjectResult = result.Result as BadRequestObjectResult;
+            Assert.Equal(SkillResponse.NoSkillRecordsFound, badRequestObjectResult.Value);
+            Assert.Equal(StatusCodes.Status400BadRequest, badRequestObjectResult.StatusCode);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.CreateSkill(It.IsAny<Skill>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateSkill_WithIdButNoSkillsRecords_ShouldReturnFailureMessage()
+        {
+            var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt(), Name = SkillFixture.CreateString(10) };
+            _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult((Skill)null));
+
+            var result = _skillController.UpdateSkill(skillDTO);
+            await Task.Run(() => result);
+
+            var badRequestObjectResult = result.Result as BadRequestObjectResult;
+            Assert.Equal(SkillResponse.NoSkillRecordsFound, badRequestObjectResult.Value);
+            Assert.Equal(StatusCodes.Status400BadRequest, badRequestObjectResult.StatusCode);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.CreateSkill(It.IsAny<Skill>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateSkill_WithEmptyName_ShouldReturnFailureMessage()
+        {
+            var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt() };
+            _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult(new Skill() { Id = skillDTO.Id }));
+
+            var result = _skillController.UpdateSkill(skillDTO);
+            await Task.Run(() => result);
+
+            var badRequestObjectResult = result.Result as BadRequestObjectResult;
+            Assert.Equal(SkillResponse.SkillNameCantBeEmpty, badRequestObjectResult.Value);
+            Assert.Equal(StatusCodes.Status400BadRequest, badRequestObjectResult.StatusCode);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.CreateSkill(It.IsAny<Skill>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateSkill_WithIdAndName_ShouldReturnSuccessMessage()
+        {
+            var skillDTO = new SkillDTO() { Id = SkillFixture.CreateInt(), Name = SkillFixture.CreateString(10) };
+            _skillRepository.Setup(s => s.GetSkillById(skillDTO.Id)).Returns(Task.FromResult(new Skill { Id = skillDTO.Id, Name = SkillFixture.CreateString(10) }));
+            _skillRepository.Setup(s => s.UpdateSkill(It.IsAny<Skill>())).Returns(Task.CompletedTask);
+
+            var result = _skillController.UpdateSkill(skillDTO);
+            await Task.Run(() => result);
+
+            var okObjectResult = result.Result as OkObjectResult;
+            Assert.Equal(SkillResponse.SkillUpdated, okObjectResult.Value);
+            Assert.Equal(StatusCodes.Status200OK, okObjectResult.StatusCode);
+            Assert.True(result.Exception == null);
+            _skillRepository.Verify(s => s.GetSkillById(It.IsAny<int>()), Times.Once);
+            _skillRepository.Verify(s => s.UpdateSkill(It.IsAny<Skill>()), Times.Once);
+        }
     }    
 }
